@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EVENT VOTE BY ZHIDAN</title>
+<style>
+body{font-family:Arial;background:#14081f;color:white;padding:20px}
+.card{background:#241235;padding:20px;border-radius:15px;margin:15px auto;max-width:900px}
+button{background:#8b5cf6;color:white;border:none;padding:10px 15px;border-radius:10px}
+input,textarea{width:100%;padding:10px;margin:5px 0;border-radius:8px}
+.member{display:flex;justify-content:space-between;padding:10px;background:#31154d;margin:5px 0;border-radius:10px}
+a{color:#d8b4fe}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>𝙴𝚅𝙴𝙽𝚃 𝚅𝙾𝚃𝙴 𝙼𝙰𝚁𝙶𝙰</h1>
+<p>𝚅𝚘𝚝𝚝𝚒𝚗𝚐 𝙼𝚊𝚛𝚐𝚊 𝚃𝚎𝚛𝚔𝚎𝚌𝚎 𝚃𝚎𝚛𝚋𝚊𝚐𝚞𝚜 𝙼𝚎𝚗𝚞𝚛𝚞𝚝 𝙻𝚘!!.</p>
+<button onclick="login()">Login Google (Demo)</button>
+<p id="user">Belum login</p>
+</div>
+
+<div class="card">
+<h2>Vote Member Event</h2>
+<div id="vote"></div>
+<p>Catatan: Hubungkan Firebase untuk vote global asli.</p>
+</div>
+
+<div class="card">
+<h2>Komentar Publik</h2>
+<input id="nama" placeholder="Nama">
+<textarea id="komentar" placeholder="Berikan semangat..."></textarea>
+<button onclick="kirim()">Kirim</button>
+<div id="listKomentar"></div>
+</div>
+
+<div class="card">
+<h2>Game Tebak Kata</h2>
+<p>Tebak: <span id="soal"></span></p>
+<input id="jawab">
+<button onclick="cek()">Cek</button>
+<p id="hasil"></p>
+</div>
+
+<div class="card">
+<h2>Follow Channel</h2>
+<a href="https://whatsapp.com/channel/0029Vb69lCUHFxOuI74JPz1D" target="_blank">Klik Disini</a>
+</div>
+
+<script>
+const members=["NAMA MARGA 1","NAMA MARGA 2","NAMA MARGA 3","NAMA MARGA 4","NAMA MARGA 5","NAMA MARGA 6","NAMA MARGA 7","NAMA MARGA 8"];
+const area=document.getElementById('vote');
+
+members.forEach(m=>{
+ let v=localStorage.getItem(m)||0;
+ area.innerHTML += `<div class="member">${m} (${v} vote) <button onclick="vote('${m}')">Vote</button></div>`;
+});
+
+function login(){
+ localStorage.setItem("user","Pengguna");
+ document.getElementById('user').innerText="Login sebagai Pengguna";
+}
+
+function vote(n){
+ if(localStorage.getItem("sudahvote")) return alert("Anda sudah vote");
+ localStorage.setItem(n,parseInt(localStorage.getItem(n)||0)+1);
+ localStorage.setItem("sudahvote","1");
+ location.reload();
+}
+
+function kirim(){
+ let data=JSON.parse(localStorage.getItem("komentarlist")||"[]");
+ data.unshift({n:nama.value,k:komentar.value});
+ localStorage.setItem("komentarlist",JSON.stringify(data));
+ tampil();
+}
+
+function tampil(){
+ let data=JSON.parse(localStorage.getItem("komentarlist")||"[]");
+ listKomentar.innerHTML=data.map(x=>`<p><b>${x.n}</b>: ${x.k}</p>`).join('');
+}
+tampil();
+
+const kata=[["NADIHZ","ZHIDAN"],["ETNOV","VOTE"],["TENEV","EVENT"]];
+let pilih=kata[Math.floor(Math.random()*kata.length)];
+soal.innerText=pilih[0];
+
+function cek(){
+ hasil.innerText=jawab.value.toUpperCase()==pilih[1]?"Benar!":"Salah!";
+}
+</script>
+
+<!-- Untuk Global Vote asli:
+Tambahkan Firebase Authentication + Firestore di sini.
+-->
+</body>
+</html>
